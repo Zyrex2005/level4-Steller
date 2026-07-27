@@ -1,0 +1,5 @@
+# Exclude screenshots and non-source files from submission zip
+*.png export-ignore
+frontend/package-lock.json export-ignore
+contracts/escrow_contract/test_snapshots/** export-ignore
+contracts/reputation_contract/test_snapshots/** export-ignore

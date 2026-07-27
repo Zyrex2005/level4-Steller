@@ -1,0 +1,19 @@
+# Rust / Soroban
+/target
+**/*.rs.bk
+
+# Node / Next.js
+frontend/node_modules
+api/node_modules
+frontend/.next
+frontend/out
+frontend/coverage
+frontend/.env.local
+frontend/.env*.local
+frontend/next-env.d.ts
+
+# Misc
+.DS_Store
+*.log
+.env
+submission.zip
