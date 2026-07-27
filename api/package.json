@@ -1,0 +1,15 @@
+{
+  "name": "skillescrow-api",
+  "version": "1.0.0",
+  "description": "Lightweight API relay for Soroban RPC events and feedback collection",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
