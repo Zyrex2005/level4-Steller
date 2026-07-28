@@ -5,6 +5,26 @@
 🚀 **Live Demo:** [https://level4-steller-bice.vercel.app/](https://level4-steller-bice.vercel.app/)  
 🎥 **Demo Video:** [https://drive.google.com/file/d/1gF_c0dQRqNR60qFIehgE2Y9NsJxVWu8I/view?usp=sharing](https://drive.google.com/file/d/1gF_c0dQRqNR60qFIehgE2Y9NsJxVWu8I/view?usp=sharing)
 
+## 📝 Feedback Form & Responses Sheet
+- **Google Form:** https://docs.google.com/forms/d/e/1FAIpQLSdkH5jicUv_iJpKaAULf9jGbagu9LoSYN7ZQgLY-XNXUU-MVA/viewform?usp=sharing&ouid=106348911276632675387
+- **Feedback Google Sheet:** https://docs.google.com/spreadsheets/d/1d8ZYc_93PM-ZHsHxYFSDZA5S8Zb53Nd2H4PAVzh_fL0/edit?usp=sharing
+
+### 📊 User Feedback Summary Table
+
+| User Name | Gmail | Feedback Summary | Rating |
+| :--- | :--- | :--- | :--- |
+| **Vivek Tiwari** | `vivek32@gmail.com` | Seamless UI and wallet connection; suggested clearer instructions for proposal creation and adding more features. | **Extremely Likely (9 - 10)** |
+| **Viru Kumar** | `kumar1235@gmail.com` | Good & functional design; reported slight transaction lag and suggested clearer instructions for proposal submission. | **Extremely Likely (9 - 10)** |
+| **Riya Tiwari** | `riyatiwari4985@gmail.com` | Excellent intuitive UI & fast transactions; requested clearer proposal creation steps and additional features. | **Extremely Likely (9 - 10)** |
+| **Yogesh Dey** | `yogeshdey32@gmail.com` | Very easy proposal submission process; experienced minor delay with wallet connection and slight transaction lag. | **Extremely Likely (9 - 10)** |
+| **Maya Saini** | `sainimaya142@gmnail.com` | Fast & intuitive UI; found proposal filing complex/confusing and requested better explanation for reputation concept. | **Moderate / Likely (7 - 8)** |
+| **Maniya Kumar** | `maniyakumar54@gmail.com` | Functional UI with seamless wallet integration; noted that proposal creation instructions need improvement and transactions had slight lag. | **Unlikely (1 - 6)** |
+| **Ajay Kumar** | `ajaykumar865@gmail.com` | Excellent UI & easy proposal submission; fast smart contract performance with minor wallet retry delay and request for more features. | **Extremely Likely (9 - 10)** |
+| **Divya Gour** | `gour362@gmail.com` | Good UI, straightforward proposals, fast transactions; asked for clearer explanations regarding the reputation and voting system. | **Moderate / Likely (7 - 8)** |
+| **Hirmmat Singh** | `hirmmatsingh32@gmail.com` | Excellent UI and easy proposal submission; suggested providing better explanations for the reputation token system. | **Unlikely (1 - 6)** |
+| **Mahak Chauhan** | `mahakaaru13@gmail.com` | Good functional UI and fast contracts; requested clearer instructions for proposals and reputation token concepts. | **Extremely Likely (9 - 10)** |
+| **Vishnu Singh** | `vishnusingh76@gmail.com` | Excellent UI, fast transactions, easy proposal process; noticed minor wallet connection retry delay and asked for voting concept clarification. | **Extremely Likely (9 - 10)** |
+
 ---
 
 ## Overview
