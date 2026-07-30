@@ -37,33 +37,53 @@ if [ ! -f "$ESCROW_WASM" ]; then
   ESCROW_WASM=$(find target -name "escrow_contract.wasm" | head -n 1)
 fi
 
+run_with_retry() {
+  local retries=4
+  local count=0
+  local delay=5
+  until "$@"; do
+    exit_code=$?
+    count=$((count + 1))
+    if [ $count -ge $retries ]; then
+      echo "==> Command failed after $count attempts with code $exit_code."
+      return $exit_code
+    fi
+    echo "==> RPC network operation glitch (attempt $count/$retries). Retrying in ${delay}s..."
+    sleep $delay
+    delay=$((delay * 2))
+  done
+}
+
 echo "==> Deploying Reputation contract"
-REPUTATION_ID=$(stellar contract deploy \
+REPUTATION_ID=$(run_with_retry stellar contract deploy \
   --wasm "$REPUTATION_WASM" \
   --source "$SOURCE_ACCOUNT" \
   --network "$NETWORK")
 echo "Reputation contract ID: $REPUTATION_ID"
+sleep 3
 
 echo "==> Deploying Escrow contract"
-ESCROW_ID=$(stellar contract deploy \
+ESCROW_ID=$(run_with_retry stellar contract deploy \
   --wasm "$ESCROW_WASM" \
   --source "$SOURCE_ACCOUNT" \
   --network "$NETWORK")
 echo "Escrow contract ID: $ESCROW_ID"
+sleep 3
 
 DEPLOYER_ADDRESS=$(stellar keys address "$SOURCE_ACCOUNT")
 
 echo "==> Initializing Reputation contract (authorized_caller = Escrow contract)"
-stellar contract invoke \
+run_with_retry stellar contract invoke \
   --id "$REPUTATION_ID" \
   --source "$SOURCE_ACCOUNT" \
   --network "$NETWORK" \
   -- initialize \
   --admin "$DEPLOYER_ADDRESS" \
   --authorized_caller "$ESCROW_ID"
+sleep 3
 
 echo "==> Initializing Escrow contract (reputation_contract = Reputation contract)"
-stellar contract invoke \
+run_with_retry stellar contract invoke \
   --id "$ESCROW_ID" \
   --source "$SOURCE_ACCOUNT" \
   --network "$NETWORK" \
