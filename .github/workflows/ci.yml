@@ -28,16 +28,32 @@ jobs:
       - name: Run contract unit tests (with edge cases)
         run: cargo test --workspace --verbose
 
+      - name: Install Stellar CLI
+        run: |
+          mkdir -p $HOME/.cargo/bin
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.cargo/bin:$PATH"
+          echo "Downloading Stellar CLI release binary..."
+          RELEASE_URL=$(curl -s https://api.github.com/repos/stellar/stellar-cli/releases/latest | grep "browser_download_url.*x86_64-unknown-linux-gnu.tar.gz" | cut -d : -f 2,3 | tr -d '"' | tr -d ' ' | head -n 1)
+          if [ -n "$RELEASE_URL" ]; then
+            curl -sSL "$RELEASE_URL" -o stellar.tar.gz
+            tar -xzf stellar.tar.gz -C $HOME/.cargo/bin/
+            chmod +x $HOME/.cargo/bin/stellar || true
+          fi
+          if ! command -v stellar &> /dev/null; then
+            cargo install --locked stellar-cli
+          fi
+
       - name: Build contracts to WASM (release)
         run: |
-          cargo build --target wasm32-unknown-unknown --release -p escrow-contract
-          cargo build --target wasm32-unknown-unknown --release -p reputation-contract
+          export PATH="$HOME/.cargo/bin:$PATH"
+          stellar contract build
 
       - name: Upload WASM artifacts
         uses: actions/upload-artifact@v4
         with:
           name: contract-wasm
-          path: target/wasm32-unknown-unknown/release/*.wasm
+          path: target/**/release/*.wasm
 
   api-service:
     name: API Relay & Feedback Service Check

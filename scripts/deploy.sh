@@ -22,13 +22,19 @@ if ! stellar keys address "$SOURCE_ACCOUNT" >/dev/null 2>&1; then
   stellar keys generate "$SOURCE_ACCOUNT" --network "$NETWORK" --fund || true
 fi
 
-export RUSTFLAGS="${RUSTFLAGS:--C target-feature=-reference-types}"
-echo "==> Building contracts to WASM"
-cargo build --target wasm32-unknown-unknown --release -p reputation-contract
-cargo build --target wasm32-unknown-unknown --release -p escrow-contract
+echo "==> Building contracts to WASM using Stellar CLI"
+stellar contract build
 
-REPUTATION_WASM="target/wasm32-unknown-unknown/release/reputation_contract.wasm"
-ESCROW_WASM="target/wasm32-unknown-unknown/release/escrow_contract.wasm"
+REPUTATION_WASM="target/wasm32v1-none/release/reputation_contract.wasm"
+ESCROW_WASM="target/wasm32v1-none/release/escrow_contract.wasm"
+
+if [ ! -f "$REPUTATION_WASM" ]; then
+  REPUTATION_WASM=$(find target -name "reputation_contract.wasm" | head -n 1)
+fi
+
+if [ ! -f "$ESCROW_WASM" ]; then
+  ESCROW_WASM=$(find target -name "escrow_contract.wasm" | head -n 1)
+fi
 
 echo "==> Deploying Reputation contract"
 REPUTATION_ID=$(stellar contract deploy \

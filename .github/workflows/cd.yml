@@ -45,8 +45,8 @@ jobs:
 
       - name: Build Soroban Contracts to WASM
         run: |
-          cargo build --target wasm32-unknown-unknown --release -p reputation-contract
-          cargo build --target wasm32-unknown-unknown --release -p escrow-contract
+          export PATH="$HOME/.cargo/bin:$PATH"
+          stellar contract build
 
       - name: Deploy & Initialize Smart Contracts on Testnet
         env:
@@ -67,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: contract-deployment-wasm
-          path: target/wasm32-unknown-unknown/release/*.wasm
+          path: target/**/release/*.wasm
 
   deploy-frontend:
     name: Step 8 - Deploy Frontend to Vercel
