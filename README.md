@@ -247,14 +247,36 @@ During user testing with 10+ distinct wallet users, real-time feedback was colle
    # Running on http://localhost:5173
    ```
 
-5. **Run Test Suites:**
+5. **Run Test Suites & Lint Checks:**
    ```bash
    # Run Smart Contract Unit Tests (12 passing tests)
    cargo test --workspace
 
+   # Run Frontend Typecheck & Lint Checks
+   cd frontend && npm run lint
+
    # Run Frontend Component Tests (3 passing tests)
    cd frontend && npm test
+
+   # Run Frontend Production Build Check
+   cd frontend && npm run build
    ```
+
+---
+
+## ⚙️ Automated CI/CD Pipeline (Step 7 & Step 8)
+
+The project features full continuous integration and deployment workflows configured via GitHub Actions:
+
+### 🟢 Step 7 — Frontend CI Validation (`.github/workflows/ci.yml`)
+- **Lint & Static Analysis:** Runs `npm run lint` (`tsc --noEmit`) to verify zero TypeScript errors.
+- **Unit Testing:** Executes `npm test` (`vitest run`) running 3 component unit tests.
+- **Production Build Check:** Runs `npm run build` (`tsc -b && vite build`) to verify clean bundle compilation.
+- **Bundle Budget Verification:** Ensures static asset sizes remain within target performance budgets.
+
+### 🚀 Step 8 — Continuous Deployment (`.github/workflows/cd.yml`)
+- **Smart Contract CD (`deploy-contracts`):** Compiles Soroban Rust contracts to release WASM binaries, installs `stellar-cli`, deploys contracts to Stellar Testnet, and initializes inter-contract references automatically.
+- **Frontend CD (`deploy-frontend`):** Compiles production asset bundles with smart contract env bindings and deploys live updates to Vercel upon pushes to `main`.
 
 ---
 
@@ -275,5 +297,7 @@ docs/
   CONTRACTS.md             # Gas, TTL, and storage optimization guide
   ARCHITECTURE.md          # Inter-contract call & event streaming design
 scripts/deploy.sh          # Automated testnet deployment workflow
-.github/workflows/ci.yml   # Level 4 GitHub Actions CI pipeline
+.github/workflows/
+  ci.yml                   # Level 4 GitHub Actions CI pipeline (Step 7)
+  cd.yml                   # Level 4 GitHub Actions CD pipeline (Step 8: Smart Contracts + Frontend)
 ```

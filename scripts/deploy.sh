@@ -13,8 +13,14 @@
 
 set -euo pipefail
 
-NETWORK="testnet"
-SOURCE_ACCOUNT="deployer"
+NETWORK="${STELLAR_NETWORK:-testnet}"
+SOURCE_ACCOUNT="${SOURCE_ACCOUNT:-deployer}"
+
+# Ensure deployer key exists if running in automated CI environments
+if ! stellar keys address "$SOURCE_ACCOUNT" >/dev/null 2>&1; then
+  echo "==> Deployer account '$SOURCE_ACCOUNT' not found. Generating and funding via Friendbot on $NETWORK..."
+  stellar keys generate "$SOURCE_ACCOUNT" --network "$NETWORK" --fund || true
+fi
 
 echo "==> Building contracts to WASM"
 cargo build --target wasm32-unknown-unknown --release -p reputation-contract

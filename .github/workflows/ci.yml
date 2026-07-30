@@ -62,7 +62,7 @@ jobs:
         run: npm test
 
   frontend:
-    name: Frontend (lint + test + build + performance budget)
+    name: Frontend CI (Step 7: lint + test + build validation)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -70,7 +70,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Node
+      - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -80,17 +80,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
+      - name: Step 7 Check 1 - Typecheck & Lint
         run: npm run lint
 
-      - name: Run frontend unit tests
+      - name: Step 7 Check 2 - Run Frontend Unit Tests
         run: npm test
 
-      - name: Build production bundle
+      - name: Step 7 Check 3 - Build Production Bundle
         run: npm run build
 
-      - name: Performance & Bundle Budget Check
+      - name: Step 7 Check 4 - Performance & Bundle Budget Check
         run: |
           echo "Checking JavaScript bundle size limits..."
           test -d dist
           ls -lh dist/assets/
+

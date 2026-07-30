@@ -1,0 +1,89 @@
+name: Level 4 CD (Smart Contracts + Frontend Deployment)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  STELLAR_NETWORK: testnet
+
+jobs:
+  deploy-contracts:
+    name: Step 8 - Deploy Smart Contracts to Stellar Testnet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Stellar CLI
+        run: |
+          cargo install --locked stellar-cli || true
+
+      - name: Build Soroban Contracts to WASM
+        run: |
+          cargo build --target wasm32-unknown-unknown --release -p reputation-contract
+          cargo build --target wasm32-unknown-unknown --release -p escrow-contract
+
+      - name: Deploy & Initialize Smart Contracts on Testnet
+        env:
+          STELLAR_SECRET_KEY: ${{ secrets.STELLAR_SECRET_KEY }}
+          SOURCE_ACCOUNT: "deployer"
+          STELLAR_NETWORK: "testnet"
+        run: |
+          if [ -n "$STELLAR_SECRET_KEY" ]; then
+            stellar keys add deployer --secret-key "$STELLAR_SECRET_KEY"
+          else
+            echo "No STELLAR_SECRET_KEY provided, generating ephemeral testnet account..."
+            stellar keys generate deployer --network testnet --fund
+          fi
+          bash ./scripts/deploy.sh
+
+      - name: Upload Contract Deployment Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-deployment-wasm
+          path: target/wasm32-unknown-unknown/release/*.wasm
+
+  deploy-frontend:
+    name: Step 8 - Deploy Frontend to Vercel
+    runs-on: ubuntu-latest
+    needs: [deploy-contracts]
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Step 8 Check - Build Production Frontend
+        run: npm run build
+        env:
+          VITE_ESCROW_CONTRACT_ID: ${{ secrets.VITE_ESCROW_CONTRACT_ID }}
+          VITE_REPUTATION_CONTRACT_ID: ${{ secrets.VITE_REPUTATION_CONTRACT_ID }}
+
+      - name: Step 8 Check - Deploy to Vercel Production
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./frontend
