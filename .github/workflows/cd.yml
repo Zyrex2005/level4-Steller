@@ -8,6 +8,7 @@ on:
 env:
   CARGO_TERM_COLOR: always
   STELLAR_NETWORK: testnet
+  RUSTFLAGS: "-C target-feature=-reference-types"
 
 jobs:
   deploy-contracts:

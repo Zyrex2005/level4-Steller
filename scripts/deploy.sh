@@ -22,6 +22,7 @@ if ! stellar keys address "$SOURCE_ACCOUNT" >/dev/null 2>&1; then
   stellar keys generate "$SOURCE_ACCOUNT" --network "$NETWORK" --fund || true
 fi
 
+export RUSTFLAGS="${RUSTFLAGS:--C target-feature=-reference-types}"
 echo "==> Building contracts to WASM"
 cargo build --target wasm32-unknown-unknown --release -p reputation-contract
 cargo build --target wasm32-unknown-unknown --release -p escrow-contract
