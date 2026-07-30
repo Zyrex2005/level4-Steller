@@ -62,7 +62,7 @@ jobs:
         run: npm test
 
   frontend:
-    name: Frontend CI (Step 7: lint + test + build validation)
+    name: "Frontend CI (Step 7 - lint + test + build validation)"
     runs-on: ubuntu-latest
     defaults:
       run:
