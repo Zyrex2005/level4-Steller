@@ -8,7 +8,6 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  RUSTFLAGS: "-C target-feature=-reference-types"
 
 jobs:
   contracts:
@@ -20,7 +19,7 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: wasm32-unknown-unknown
+          targets: wasm32-unknown-unknown, wasm32v1-none
 
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
@@ -47,6 +46,7 @@ jobs:
       - name: Build contracts to WASM (release)
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
+          rustup target add wasm32v1-none || true
           stellar contract build
 
       - name: Upload WASM artifacts

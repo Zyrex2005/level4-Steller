@@ -23,6 +23,7 @@ if ! stellar keys address "$SOURCE_ACCOUNT" >/dev/null 2>&1; then
 fi
 
 echo "==> Building contracts to WASM using Stellar CLI"
+rustup target add wasm32v1-none || true
 stellar contract build
 
 REPUTATION_WASM="target/wasm32v1-none/release/reputation_contract.wasm"

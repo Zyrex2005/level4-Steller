@@ -8,7 +8,6 @@ on:
 env:
   CARGO_TERM_COLOR: always
   STELLAR_NETWORK: testnet
-  RUSTFLAGS: "-C target-feature=-reference-types"
 
 jobs:
   deploy-contracts:
@@ -20,7 +19,7 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: wasm32-unknown-unknown
+          targets: wasm32-unknown-unknown, wasm32v1-none
 
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
@@ -46,6 +45,7 @@ jobs:
       - name: Build Soroban Contracts to WASM
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
+          rustup target add wasm32v1-none || true
           stellar contract build
 
       - name: Deploy & Initialize Smart Contracts on Testnet
